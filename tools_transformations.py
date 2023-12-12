@@ -221,3 +221,64 @@ def delete_quantity():
     del data["QUANTITY"]
     # Save the new CSV file
     data.to_csv("order_items.csv", index=False)
+
+
+def change_user():
+    """Function to change the column USER_ID from orders CSV file"""
+    # reading CSV file to have all users
+    data_users = read_csv("users.csv")
+    # converting column data to list
+    list_users_table_users = data_users["USER_ID"].tolist()
+    # reading CSV file
+    data = read_csv("orders.csv")
+    # converting column data to list
+    list_users = data["USER_ID"].tolist()
+    listado_repetidos = []
+    # Change the user_id by the user_id randomly
+    for i in range(len(list_users)):
+        random_value = random.choice(list_users_table_users)
+        list_users[i] = random_value
+        # if random_value in listado_repetidos more than 5 times, we change the value
+        # by another random value
+        if listado_repetidos.count(random_value) > 5:
+            random_value = random.choice(list_users_table_users)
+            list_users[i] = random_value
+    # Delete the column USER_ID
+    del data["USER_ID"]
+    # Add the new column USER_ID
+    data["USER_ID"] = list_users
+    # Save the new CSV file
+    data.to_csv("orders.csv", index=False)
+    print("The new list of values is: ", list_users)
+
+
+def create_col_empty():
+    """Function to create a column empty"""
+    # reading CSV file
+    data = read_csv("orders.csv")
+    # converting column data to list
+    list_orders = data["ORDER_ID"].tolist()
+    list_empty = []
+    # get number of elements in list
+    length = len(list_orders)
+    for i in range(length):
+        list_orders[i] = ","
+    # Add the new column USER_ID
+    data["_FIVETRAN_DELETED"] = list_orders
+    # Save the new CSV file
+    data.to_csv("orders.csv", index=False)
+    print("The new list of values is: ", list_empty)
+
+
+def change_place_column():
+    """Function to change the place of a column"""
+    # reading CSV file
+    data = read_csv("orders.csv")
+    # converting column data to list
+    list__FIVETRAN_SYNCED = data["_FIVETRAN_SYNCED"].tolist()
+    # Delete the column USER_ID
+    del data["_FIVETRAN_SYNCED"]
+    # add the new column USER_ID
+    data["_FIVETRAN_SYNCED"] = list__FIVETRAN_SYNCED
+    # Save the new CSV file
+    data.to_csv("orders.csv", index=False)
